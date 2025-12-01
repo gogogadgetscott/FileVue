@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Network Security Configuration
+    
+    WARNING: This configuration allows cleartext (HTTP) traffic for development.
+    For production deployments, you should:
+    1. Set cleartextTrafficPermitted="false" in base-config
+    2. Only allow HTTPS connections to your FileVue server
+    3. Consider using certificate pinning for enhanced security
+    
+    Example production configuration:
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>
