@@ -1,0 +1,2 @@
+This directory is mounted into the explorer container when using docker-compose.
+Add or remove files here to try out the interface while keeping your host files safe.

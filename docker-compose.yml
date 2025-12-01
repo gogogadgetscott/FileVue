@@ -1,0 +1,42 @@
+name: filevue
+
+services:
+  filevue:
+    container_name: filevue
+    build:
+      context: .
+      args:
+        - NODE_VERSION=${NODE_VERSION:-25-alpine}
+    ports:
+      - "8080:80"
+      - "8443:443"
+    environment:
+      - PORT=${PORT:-80}
+      - ROOT_DIRECTORY=${ROOT_DIRECTORY:-/data}
+      - READ_ONLY_MODE=${READ_ONLY_MODE:-true}
+      - MAX_PREVIEW_BYTES=${MAX_PREVIEW_BYTES:-1048576}
+      - IMAGE_PREVIEW_MAX_BYTES=${IMAGE_PREVIEW_MAX_BYTES:-2097152}
+      - THUMBNAIL_MAX_BYTES=${THUMBNAIL_MAX_BYTES:-262144}
+      - EXPLORER_USERNAME=${EXPLORER_USERNAME:-demo}
+      - EXPLORER_PASSWORD=${EXPLORER_PASSWORD:-demo-password}
+      - SESSION_SECRET=${SESSION_SECRET:-change-me}
+      - SESSION_TTL_SECONDS=${SESSION_TTL_SECONDS:-3600}
+      - HTTPS_ENABLED=${HTTPS_ENABLED:-true}
+      - SSL_CERT_PATH=${SSL_CERT_PATH:-/certs/cert.pem}
+      - SSL_KEY_PATH=${SSL_KEY_PATH:-/certs/key.pem}
+      - COOKIE_SECURE=${COOKIE_SECURE:-true}
+    volumes:
+      - ./server/src:/app/server/src
+      - ./client/dist:/app/server/public
+      # Mount data directory (read-only or read-write based on your preference)
+      - ${DATA_VOLUME:-./sample-data}:/data:ro
+      # - ${DATA_VOLUME:-./sample-data}:/data:rw
+      # Mount SSL certificates for HTTPS
+      - ${CERTS_VOLUME:-./certs}:/certs:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "--no-check-certificate", "http://localhost:80/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
