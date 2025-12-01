@@ -5,8 +5,11 @@
 [![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Android](https://img.shields.io/badge/Android-8.0+-3DDC84?logo=android&logoColor=white)](android-app/)
 
 Modern web-based file and folder explorer with a secure Node.js API, React UI, and Docker Compose deployment. FileVue can safely browse any host folder, optionally locking itself to **read-only** mode for dry runs and testing, and ships with optional username/password authentication.
+
+**📱 Now with an [Android companion app](android-app/)!**
 
 ![FileVue Screenshot](https://via.placeholder.com/800x450?text=FileVue+Screenshot)
 
@@ -20,6 +23,7 @@ Modern web-based file and folder explorer with a secure Node.js API, React UI, a
 - 🔒 **Security hardened** — path resolution prevents escaping the mounted root
 - 🔐 **Optional authentication** — JWT-protected API with username/password login
 - 🐳 **Single-container deployment** — Express API serves the built React client
+- 📱 **Android companion app** — native mobile app for on-the-go file browsing
 
 ## 📋 Requirements
 
