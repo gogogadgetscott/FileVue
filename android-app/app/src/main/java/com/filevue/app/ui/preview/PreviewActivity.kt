@@ -58,6 +58,24 @@ class PreviewActivity : AppCompatActivity() {
             preview?.let { displayPreview(it) }
         }
 
+        // Downloading state
+        viewModel.isDownloading.observe(this) { isDownloading ->
+            binding.downloadButton.isEnabled = !isDownloading
+            binding.downloadButton.text = if (isDownloading) {
+                getString(R.string.loading)
+            } else {
+                getString(R.string.download)
+            }
+        }
+
+        // Download success
+        viewModel.downloadSuccess.observe(this) { path ->
+            path?.let {
+                Snackbar.make(binding.root, "Downloaded to: $it", Snackbar.LENGTH_LONG).show()
+                viewModel.clearDownloadSuccess()
+            }
+        }
+
         // Error
         viewModel.error.observe(this) { error ->
             error?.let {
@@ -151,13 +169,7 @@ class PreviewActivity : AppCompatActivity() {
         val downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val destination = File(downloadDir, fileName)
 
-        // Use the BrowserViewModel's download functionality would require injection
-        // For simplicity, show a message
-        Snackbar.make(
-            binding.root,
-            "Download started: $fileName",
-            Snackbar.LENGTH_SHORT
-        ).show()
+        viewModel.downloadFile(filePath, destination)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

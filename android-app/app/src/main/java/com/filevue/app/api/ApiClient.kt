@@ -91,7 +91,12 @@ object ApiClient {
     private fun buildRetrofit(): Retrofit {
         if (retrofit == null) {
             val loggingInterceptor = HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
+                // Only enable detailed logging in debug builds to avoid exposing sensitive data
+                level = if (com.filevue.app.BuildConfig.DEBUG) {
+                    HttpLoggingInterceptor.Level.BODY
+                } else {
+                    HttpLoggingInterceptor.Level.NONE
+                }
             }
 
             val authInterceptor = Interceptor { chain ->

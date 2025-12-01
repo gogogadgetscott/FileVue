@@ -8,6 +8,7 @@ import com.filevue.app.data.FilePreview
 import com.filevue.app.data.FileVueRepository
 import com.filevue.app.data.ThumbnailPayload
 import kotlinx.coroutines.launch
+import java.io.File
 
 /**
  * ViewModel for file preview functionality
@@ -27,6 +28,12 @@ class PreviewViewModel : ViewModel() {
 
     private val _thumbnail = MutableLiveData<ThumbnailPayload?>()
     val thumbnail: LiveData<ThumbnailPayload?> = _thumbnail
+
+    private val _downloadSuccess = MutableLiveData<String?>()
+    val downloadSuccess: LiveData<String?> = _downloadSuccess
+
+    private val _isDownloading = MutableLiveData(false)
+    val isDownloading: LiveData<Boolean> = _isDownloading
 
     /**
      * Load file content/preview
@@ -65,9 +72,36 @@ class PreviewViewModel : ViewModel() {
     }
 
     /**
+     * Download file to specified destination
+     */
+    fun downloadFile(path: String, destination: File) {
+        viewModelScope.launch {
+            _isDownloading.value = true
+            _error.value = null
+
+            when (val result = repository.downloadFile(path, destination)) {
+                is FileVueRepository.Result.Success -> {
+                    _downloadSuccess.value = destination.absolutePath
+                }
+                is FileVueRepository.Result.Error -> {
+                    _error.value = result.message
+                }
+            }
+            _isDownloading.value = false
+        }
+    }
+
+    /**
      * Clear error
      */
     fun clearError() {
         _error.value = null
+    }
+
+    /**
+     * Clear download success message
+     */
+    fun clearDownloadSuccess() {
+        _downloadSuccess.value = null
     }
 }
